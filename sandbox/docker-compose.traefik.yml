@@ -45,12 +45,23 @@ services:
       - traefik.http.middlewares.whoami_authentikforward.plugin.authentikForwardPlugin.unauthorizedPaths=^/deny/?$
       - traefik.http.middlewares.whoami_authentikforward.plugin.authentikForwardPlugin.redirectPaths=^/login/?$
 
+      - traefik.http.routers.whoami_cache.entrypoints=web
+      - traefik.http.routers.whoami_cache.rule=Host(`whoami-cache.localhost`)
+      - traefik.http.routers.whoami_cache.middlewares=whoami_cache_authentikforward,whoami_cache_stripprefix
+      - traefik.http.middlewares.whoami_cache_stripprefix.stripPrefix.prefixes=/test
+      - traefik.http.middlewares.whoami_cache_authentikforward.plugin.authentikForwardPlugin.address=http://akserver:9000
+      - traefik.http.middlewares.whoami_cache_authentikforward.plugin.authentikForwardPlugin.cacheDuration=30s
+      - traefik.http.middlewares.whoami_cache_authentikforward.plugin.authentikForwardPlugin.unauthorizedStatusCode=401
+      - traefik.http.middlewares.whoami_cache_authentikforward.plugin.authentikForwardPlugin.redirectStatusCode=302
+      - traefik.http.middlewares.whoami_cache_authentikforward.plugin.authentikForwardPlugin.skippedPaths=^/skip/?$
+      - traefik.http.middlewares.whoami_cache_authentikforward.plugin.authentikForwardPlugin.unauthorizedPaths=^/deny/?$
+      - traefik.http.middlewares.whoami_cache_authentikforward.plugin.authentikForwardPlugin.redirectPaths=^/login/?$
+
       - traefik.http.routers.whoami_secure.entrypoints=websecure
       - traefik.http.routers.whoami_secure.rule=Host(`whoami-secure.localhost`)
       - traefik.http.routers.whoami_secure.middlewares=whoami_secure_authentikforward,whoami_secure_stripprefix
       - traefik.http.middlewares.whoami_secure_stripprefix.stripPrefix.prefixes=/test
       - traefik.http.middlewares.whoami_secure_authentikforward.plugin.authentikForwardPlugin.address=https://akserver:9443
-      - traefik.http.middlewares.whoami_secure_authentikforward.plugin.authentikForwardPlugin.cacheDuration=1m
       - traefik.http.middlewares.whoami_secure_authentikforward.plugin.authentikForwardPlugin.unauthorizedStatusCode=401
       - traefik.http.middlewares.whoami_secure_authentikforward.plugin.authentikForwardPlugin.redirectStatusCode=302
       - traefik.http.middlewares.whoami_secure_authentikforward.plugin.authentikForwardPlugin.skippedPaths=^/skip/?$

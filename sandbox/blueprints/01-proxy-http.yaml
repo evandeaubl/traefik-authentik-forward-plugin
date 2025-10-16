@@ -9,6 +9,8 @@ metadata:
 context:
   app_name: whoami-http
   app_url: http://whoami.localhost
+  app_name_cache: whoami-http-cache
+  app_url_cache: http://whoami-cache.localhost
 entries:
   - model: authentik_providers_proxy.proxyprovider
     id: whoami-http-provider
@@ -29,6 +31,25 @@ entries:
       access_token_validity: hours=24
       intercept_header_auth: false
 
+  - model: authentik_providers_proxy.proxyprovider
+    id: whoami-http-cache-provider
+    identifiers:
+      name: whoami-http-cache-provider
+    attrs:
+      mode: forward_single
+      external_host: !Context app_url_cache
+      authorization_flow:
+        !Find [
+          authentik_flows.flow,
+          [slug, default-provider-authorization-implicit-consent],
+        ]
+      authentication_flow:
+        !Find [authentik_flows.flow, [slug, default-authentication-flow]]
+      invalidation_flow:
+        !Find [authentik_flows.flow, [slug, default-provider-invalidation-flow]]
+      access_token_validity: hours=24
+      intercept_header_auth: false
+
   - model: authentik_core.application
     id: whoami-http-application
     identifiers:
@@ -37,3 +58,12 @@ entries:
       name: !Context app_name
       provider: !KeyOf whoami-http-provider
       meta_launch_url: !Context app_url
+
+  - model: authentik_core.application
+    id: whoami-http-cache-application
+    identifiers:
+      slug: whoami-http-cache-application
+    attrs:
+      name: !Context app_name_cache
+      provider: !KeyOf whoami-http-cache-provider
+      meta_launch_url: !Context app_url_cache

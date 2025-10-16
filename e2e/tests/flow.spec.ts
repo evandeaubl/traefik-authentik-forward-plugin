@@ -61,8 +61,10 @@ test.describe("authentication", () => {
   test("should not authenticate skipped pages", async ({
     sharedContextPage: page,
   }) => {
-    // go to main page
-    const response = (await page.goto("http://whoami.localhost/skip")) as Response;
+    // go to skip page
+    const response = (await page.goto(
+      "http://whoami.localhost/skip",
+    )) as Response;
 
     // check for upstream
     expect(response.status()).toBe(StatusCodes.OK);
@@ -83,7 +85,7 @@ test.describe("authentication", () => {
     test("should return ok on /allow after logout", async ({
       sharedContextPage: page,
     }) => {
-      // go to main page
+      // go to allow page
       const response = (await page.goto(
         "http://whoami.localhost/allow",
       )) as Response;
@@ -95,7 +97,7 @@ test.describe("authentication", () => {
     test("should return unauthorized on /deny after logout", async ({
       sharedContextPage: page,
     }) => {
-      // go to main page
+      // go to deny page
       const response = (await page.goto(
         "http://whoami.localhost/deny",
       )) as Response;

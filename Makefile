@@ -24,7 +24,7 @@ yaegi_test:
 	$(foreach pkg, $(PACKAGES), yaegi test -v $(pkg);)
 
 e2e_test:
-	cd e2e && npm install --include=dev && npm run test
+	cd e2e && npm install --include=dev && npm run test:install && npm run test
 
 e2e_ui_test:
-	cd e2e && npm install --include=dev && npm run test:dev
+	cd e2e && npm install --include=dev && npm run test:install &&  npm run test:dev

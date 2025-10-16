@@ -11,6 +11,7 @@ test("should return ok with /skip", async ({ request }) => {
   expect(body).toContain("X-Forwarded-Host: whoami.localhost");
   expect(body).not.toContain("X-Authentik-User");
 });
+
 test("should return ok with /allow", async ({ request }) => {
   const response = await request.get("http://whoami.localhost/allow");
   expect(response.status()).toBe(StatusCodes.OK);
