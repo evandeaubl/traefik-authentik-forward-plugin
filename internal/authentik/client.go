@@ -16,12 +16,17 @@ type Client struct {
 	session session.Client
 }
 
-func NewClient(context context.Context, client *http.Client, config *Config) *Client {
+func NewClient(context context.Context, client *http.Client, config *Config) (*Client, error) {
+	sessionClient, err := session.NewClient(context, config.CacheDuration)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create session client: %w", err)
+	}
+
 	return &Client{
 		config:  config,
 		client:  client,
-		session: session.NewClient(context, config.CacheDuration),
-	}
+		session: sessionClient,
+	}, nil
 }
 
 func (c *Client) Check(meta *RequestMeta) (*ResponseMeta, error) {

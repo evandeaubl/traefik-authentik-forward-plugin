@@ -12,7 +12,7 @@ type Client interface {
 	Delete(cookies []*http.Cookie)
 }
 
-func NewClient(context context.Context, duration time.Duration) Client { //nolint:ireturn
+func NewClient(context context.Context, duration time.Duration) (Client, error) { //nolint:ireturn
 	if duration == 0 {
 		return NewStandardClient()
 	}

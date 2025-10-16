@@ -10,7 +10,12 @@ import (
 
 func TestNewClient(t *testing.T) {
 	t.Run("with no duration", func(t *testing.T) {
-		client := session.NewClient(context.Background(), 0)
+		client, err := session.NewClient(context.Background(), 0)
+
+		// check that there is no error
+		if err != nil {
+			t.Fatalf("expected no error, got %v", err)
+		}
 
 		// check that the client is not nil
 		if client == nil {
@@ -24,7 +29,12 @@ func TestNewClient(t *testing.T) {
 	})
 
 	t.Run("with duration", func(t *testing.T) {
-		client := session.NewClient(context.Background(), 10*time.Second)
+		client, err := session.NewClient(context.Background(), 10*time.Second)
+
+		// check that there is no error
+		if err != nil {
+			t.Fatalf("expected no error, got %v", err)
+		}
 
 		// check that the client is not nil
 		if client == nil {

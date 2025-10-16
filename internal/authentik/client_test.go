@@ -34,7 +34,7 @@ func TestCheck(t *testing.T) {
 		defer server.Close()
 
 		config := &authentik.Config{Address: server.URL}
-		client := authentik.NewClient(context.Background(), server.Client(), config)
+		client, _ := authentik.NewClient(context.Background(), server.Client(), config)
 
 		reqMeta := &authentik.RequestMeta{
 			URL: &url.URL{
@@ -110,7 +110,7 @@ func TestCheck(t *testing.T) {
 		defer server.Close()
 
 		config := &authentik.Config{Address: server.URL}
-		client := authentik.NewClient(context.Background(), server.Client(), config)
+		client, _ := authentik.NewClient(context.Background(), server.Client(), config)
 
 		reqMeta := &authentik.RequestMeta{
 			URL: &url.URL{
@@ -178,7 +178,7 @@ func TestCheck(t *testing.T) {
 		defer server.Close()
 
 		config := &authentik.Config{Address: server.URL}
-		client := authentik.NewClient(context.Background(), server.Client(), config)
+		client, _ := authentik.NewClient(context.Background(), server.Client(), config)
 
 		meta := &authentik.RequestMeta{
 			URL: &url.URL{
@@ -257,7 +257,7 @@ func TestRequest(t *testing.T) {
 		defer akServer.Close()
 
 		config := &authentik.Config{Address: akServer.URL}
-		client := authentik.NewClient(context.Background(), akServer.Client(), config)
+		client, _ := authentik.NewClient(context.Background(), akServer.Client(), config)
 
 		meta := &authentik.RequestMeta{
 			URL: &url.URL{
@@ -301,7 +301,7 @@ func TestRequest(t *testing.T) {
 		defer akServer.Close()
 
 		config := &authentik.Config{Address: akServer.URL}
-		client := authentik.NewClient(context.Background(), akServer.Client(), config)
+		client, _ := authentik.NewClient(context.Background(), akServer.Client(), config)
 
 		meta := &authentik.RequestMeta{
 			URL: &url.URL{
@@ -339,7 +339,7 @@ func TestRequest(t *testing.T) {
 		defer akServer.Close()
 
 		config := &authentik.Config{Address: akServer.URL}
-		client := authentik.NewClient(context.Background(), akServer.Client(), config)
+		client, _ := authentik.NewClient(context.Background(), akServer.Client(), config)
 
 		meta := &authentik.RequestMeta{
 			URL: &url.URL{

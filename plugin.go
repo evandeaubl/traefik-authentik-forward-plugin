@@ -58,7 +58,10 @@ func New(ctx context.Context, next http.Handler, config *config.Config, name str
 		return nil, fmt.Errorf("failed to create http client: %w", err)
 	}
 
-	client := authentik.NewClient(ctx, httpClient, pc.Authentik)
+	client, err := authentik.NewClient(ctx, httpClient, pc.Authentik)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create authentik client: %w", err)
+	}
 
 	return &Plugin{
 		name:   name,

@@ -2,6 +2,7 @@ package session
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"sync"
 	"time"
@@ -13,16 +14,16 @@ type CacheClient struct {
 	store    sync.Map
 }
 
-func NewCacheClient(context context.Context, duration time.Duration) *CacheClient {
+func NewCacheClient(context context.Context, duration time.Duration) (*CacheClient, error) {
 	if duration == 0 {
-		panic("duration must be greater than 0")
+		return nil, errors.New("duration must be greater than 0")
 	}
 
 	return &CacheClient{
 		context:  context,
 		duration: duration,
 		store:    sync.Map{},
-	}
+	}, nil
 }
 
 func (c *CacheClient) Get(cookies []*http.Cookie) *Session {
@@ -37,11 +38,12 @@ func (c *CacheClient) Get(cookies []*http.Cookie) *Session {
 }
 
 func (c *CacheClient) Set(cookies []*http.Cookie, meta *Session) {
-	sessionId := GetIdentifier(cookies)
-	c.store.Store(sessionId, meta)
 	if c.context.Err() != nil {
 		return
 	}
+
+	sessionId := GetIdentifier(cookies)
+	c.store.Store(sessionId, meta)
 
 	go func() {
 		timer := time.NewTimer(c.duration)

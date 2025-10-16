@@ -5,8 +5,8 @@ import "net/http"
 type StandardClient struct {
 }
 
-func NewStandardClient() *StandardClient {
-	return &StandardClient{}
+func NewStandardClient() (*StandardClient, error) {
+	return &StandardClient{}, nil
 }
 
 func (c *StandardClient) Get(cookies []*http.Cookie) *Session {

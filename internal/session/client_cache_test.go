@@ -11,18 +11,26 @@ import (
 
 func TestNewCacheClient(t *testing.T) {
 	t.Run("with no duration", func(t *testing.T) {
-		defer func() {
-			// check that the constructor panics
-			if r := recover(); r == nil {
-				t.Fatal("expected panic")
-			}
-		}()
+		client, err := session.NewCacheClient(context.Background(), 0)
 
-		session.NewCacheClient(context.Background(), 0)
+		// check that an error is returned
+		if err == nil {
+			t.Fatal("expected error, got none")
+		}
+
+		// check that the client is nil
+		if client != nil {
+			t.Fatal("expected client to be nil")
+		}
 	})
 
 	t.Run("with duration", func(t *testing.T) {
-		client := session.NewCacheClient(context.Background(), 10*time.Second)
+		client, err := session.NewCacheClient(context.Background(), 10*time.Second)
+
+		// check that there is no error
+		if err != nil {
+			t.Fatalf("expected no error, got %v", err)
+		}
 
 		// check that the client is not nil
 		if client == nil {
@@ -33,7 +41,7 @@ func TestNewCacheClient(t *testing.T) {
 
 func TestCacheClient(t *testing.T) {
 	t.Run("retrieve without store", func(t *testing.T) {
-		client := session.NewCacheClient(context.Background(), 10*time.Second)
+		client, _ := session.NewCacheClient(context.Background(), 10*time.Second)
 
 		session := client.Get([]*http.Cookie{
 			{
@@ -49,7 +57,7 @@ func TestCacheClient(t *testing.T) {
 	})
 
 	t.Run("retrieve after store", func(t *testing.T) {
-		client := session.NewCacheClient(context.Background(), 10*time.Second)
+		client, _ := session.NewCacheClient(context.Background(), 10*time.Second)
 
 		session := &session.Session{
 			IsAuthenticated: true,
@@ -96,7 +104,7 @@ func TestCacheClient(t *testing.T) {
 	})
 
 	t.Run("retrieve after delete", func(t *testing.T) {
-		client := session.NewCacheClient(context.Background(), 10*time.Second)
+		client, _ := session.NewCacheClient(context.Background(), 10*time.Second)
 
 		session := &session.Session{
 			IsAuthenticated: true,
@@ -134,7 +142,7 @@ func TestCacheClient(t *testing.T) {
 	})
 
 	t.Run("retrieve after expiration", func(t *testing.T) {
-		client := session.NewCacheClient(context.Background(), 10*time.Millisecond)
+		client, _ := session.NewCacheClient(context.Background(), 10*time.Millisecond)
 
 		session := &session.Session{
 			IsAuthenticated: true,
@@ -163,9 +171,57 @@ func TestCacheClient(t *testing.T) {
 		}
 	})
 
-	t.Run("retrieve after expiration cancel", func(t *testing.T) {
+	t.Run("retrieve after cancellation", func(t *testing.T) {
 		ctx, cancel := context.WithCancel(context.Background())
-		client := session.NewCacheClient(ctx, 10*time.Millisecond)
+		client, _ := session.NewCacheClient(ctx, 500*time.Millisecond)
+
+		session := &session.Session{
+			IsAuthenticated: true,
+			Headers:         http.Header{},
+			Cookies:         []*http.Cookie{},
+		}
+		client.Set([]*http.Cookie{
+			{
+				Name:  "test",
+				Value: "test",
+			},
+		}, session)
+
+		// cancel the context
+		cancel()
+
+		// wait for the cancellation to be processed
+		time.Sleep(10 * time.Millisecond)
+
+		// check that the session is not nil
+		session = client.Get([]*http.Cookie{
+			{
+				Name:  "test",
+				Value: "test",
+			},
+		})
+		if session == nil {
+			t.Errorf("expected session to be not nil")
+		}
+
+		// wait for the session to expire
+		time.Sleep(500 * time.Millisecond)
+
+		// check that the session is not nil
+		session = client.Get([]*http.Cookie{
+			{
+				Name:  "test",
+				Value: "test",
+			},
+		})
+		if session == nil {
+			t.Errorf("expected session to be not nil")
+		}
+	})
+
+	t.Run("store after cancellation", func(t *testing.T) {
+		ctx, cancel := context.WithCancel(context.Background())
+		client, _ := session.NewCacheClient(ctx, 10*time.Second)
 
 		// cancel the context
 		cancel()
@@ -182,23 +238,20 @@ func TestCacheClient(t *testing.T) {
 			},
 		}, session)
 
-		// wait for the session to expire
-		time.Sleep(30 * time.Millisecond)
-
-		// check that the session is not nil
+		// check that the session is nil
 		session = client.Get([]*http.Cookie{
 			{
 				Name:  "test",
 				Value: "test",
 			},
 		})
-		if session == nil {
-			t.Errorf("expected session to be not nil")
+		if session != nil {
+			t.Errorf("expected session to be nil")
 		}
 	})
 
 	t.Run("delete before store", func(t *testing.T) {
-		client := session.NewCacheClient(context.Background(), 10*time.Second)
+		client, _ := session.NewCacheClient(context.Background(), 10*time.Second)
 
 		client.Delete([]*http.Cookie{
 			{
