@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/xabinapal/traefik-authentik-forward-plugin/internal/session"
+	"github.com/evandeaubl/traefik-authentik-forward-plugin/internal/session"
 )
 
 type RequestMeta struct {

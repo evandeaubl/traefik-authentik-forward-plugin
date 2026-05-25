@@ -8,10 +8,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/xabinapal/traefik-authentik-forward-plugin/internal/authentik"
-	"github.com/xabinapal/traefik-authentik-forward-plugin/internal/config"
-	"github.com/xabinapal/traefik-authentik-forward-plugin/internal/httpclient"
-	"github.com/xabinapal/traefik-authentik-forward-plugin/internal/httputil"
+	"github.com/evandeaubl/traefik-authentik-forward-plugin/internal/authentik"
+	"github.com/evandeaubl/traefik-authentik-forward-plugin/internal/config"
+	"github.com/evandeaubl/traefik-authentik-forward-plugin/internal/httpclient"
+	"github.com/evandeaubl/traefik-authentik-forward-plugin/internal/httputil"
 )
 
 func CreateConfig() *config.Config {

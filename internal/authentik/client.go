@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/xabinapal/traefik-authentik-forward-plugin/internal/session"
+	"github.com/evandeaubl/traefik-authentik-forward-plugin/internal/session"
 )
 
 type Client struct {

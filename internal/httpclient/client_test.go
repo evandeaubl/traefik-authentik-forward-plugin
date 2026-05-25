@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/xabinapal/traefik-authentik-forward-plugin/internal/httpclient"
+	"github.com/evandeaubl/traefik-authentik-forward-plugin/internal/httpclient"
 )
 
 //nolint:gochecknoglobals

@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/xabinapal/traefik-authentik-forward-plugin/internal/httputil"
+	"github.com/evandeaubl/traefik-authentik-forward-plugin/internal/httputil"
 )
 
 func TestResponseMangler(t *testing.T) {

@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/xabinapal/traefik-authentik-forward-plugin/internal/session"
+	"github.com/evandeaubl/traefik-authentik-forward-plugin/internal/session"
 )
 
 func TestNewCacheClient(t *testing.T) {

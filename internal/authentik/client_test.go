@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/xabinapal/traefik-authentik-forward-plugin/internal/authentik"
+	"github.com/evandeaubl/traefik-authentik-forward-plugin/internal/authentik"
 )
 
 func TestCheck(t *testing.T) {

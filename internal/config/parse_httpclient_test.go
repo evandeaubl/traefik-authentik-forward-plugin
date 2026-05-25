@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/xabinapal/traefik-authentik-forward-plugin/internal/config"
+	"github.com/evandeaubl/traefik-authentik-forward-plugin/internal/config"
 )
 
 func TestParse_Timeout(t *testing.T) {
